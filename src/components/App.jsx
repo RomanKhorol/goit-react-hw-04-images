@@ -28,7 +28,7 @@ export default function App() {
         setButton(false);
         setLoading(true);
         const fetchedPictures = await fetchPictures(text, numberPage);
-        setPictures(prevPictures => [...prevPictures, fetchedPictures.hits]);
+        setPictures(prevPictures => [...prevPictures, ...fetchedPictures.hits]);
         console.log(fetchedPictures);
         if (fetchPictures.hits.length === 0) {
           Notiflix.Notify.warning('No picture are found');
@@ -72,10 +72,6 @@ export default function App() {
   const onBtnClick = () => {
     setNumberPaget(prevNumberPaget => prevNumberPaget + 1);
   };
-
-  //      const nandleBtnClick = number => {
-  //   this.setState({ numberPage: number });
-  // };
 
   return (
     <div>
