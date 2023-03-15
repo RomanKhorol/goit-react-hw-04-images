@@ -61,7 +61,7 @@ export default function App() {
 
   const closeModalByClickOverlay = event => {
     if (event.currentTarget === event.target) {
-      this.setState({ shownModal: false });
+      setShownModal(false);
     }
   };
 
