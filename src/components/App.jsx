@@ -30,8 +30,7 @@ export default function App() {
         setPictures(prevPictures => [...prevPictures, ...pictures.hits]);
 
         lnght += pictures.hits.length;
-        console.log(pictures);
-        console.log(lnght);
+
         if (lnght >= pictures.totalHits && pictures.hits.length !== 0) {
           Notiflix.Notify.warning(
             'Were sorry, but youve reached the end of search results.'
