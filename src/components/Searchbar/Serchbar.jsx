@@ -1,49 +1,46 @@
-import { Component } from 'react';
+import React, { useState } from 'react';
 import Notiflix from 'notiflix';
 import { ImSearch } from 'react-icons/im';
 import { Header, Form, Input, Button } from './Serchbar.styled';
-export default class Serchbar extends Component {
-  state = {
-    text: '',
-  };
+export default function Serchbar({ onSubmit }) {
+  const [text, setText] = useState('');
 
-  handleNameChange = e => {
-    this.setState({ text: e.currentTarget.value.toLowerCase() });
+  const handleNameChange = e => {
+    setText(e.currentTarget.value.toLowerCase());
   };
-  handleSubmit = event => {
+  const handleSubmit = event => {
     event.preventDefault();
 
-    if (this.state.text.trim() === '') {
+    if (text.trim() === '') {
       Notiflix.Notify.warning('Please enter keyword');
       return;
     }
-    this.props.onSubmit(this.state.text);
-    this.setState({ text: '' });
+    onSubmit(text);
+    setText('');
   };
-  render() {
-    return (
-      <Header className="searchbar">
-        <div>
-          <Form className="form" onSubmit={this.handleSubmit}>
-            <Button type="submit" className="button">
-              <span className="button-label">
-                <ImSearch />
-              </span>
-            </Button>
 
-            <Input
-              className="input"
-              name="text"
-              type="text"
-              autoComplete="off"
-              autoFocus
-              placeholder="Search images and photos"
-              value={this.state.text}
-              onChange={this.handleNameChange}
-            />
-          </Form>
-        </div>
-      </Header>
-    );
-  }
+  return (
+    <Header className="searchbar">
+      <div>
+        <Form className="form" onSubmit={handleSubmit}>
+          <Button type="submit" className="button">
+            <span className="button-label">
+              <ImSearch />
+            </span>
+          </Button>
+
+          <Input
+            className="input"
+            name="text"
+            type="text"
+            autoComplete="off"
+            autoFocus
+            placeholder="Search images and photos"
+            value={text}
+            onChange={handleNameChange}
+          />
+        </Form>
+      </div>
+    </Header>
+  );
 }

@@ -7,7 +7,7 @@ import { BallTriangle } from 'react-loader-spinner';
 import Modal from 'components/Modal/Modal';
 import Serchbar from './Searchbar/Serchbar';
 import ImageGllery from './ImageGallery/ImageGallery';
-
+let lnght = 0;
 export default function App() {
   const [pictures, setPictures] = useState([]);
   const [button, setButton] = useState(false);
@@ -22,28 +22,27 @@ export default function App() {
       return;
     }
     window.addEventListener('keydown', handleKeyDown);
-    async function getPictures() {
-      try {
-        setPictures([]);
-        setButton(false);
-        setLoading(true);
-        const fetchedPictures = await fetchPictures(text, numberPage);
-        setPictures(prevPictures => [...prevPictures, ...fetchedPictures.hits]);
-        console.log(fetchedPictures);
-        if (fetchPictures.hits.length === 0) {
+
+    setButton(false);
+    setLoading(true);
+    fetchPictures(text, numberPage)
+      .then(pictures => {
+        setPictures(prevPictures => [...prevPictures, ...pictures.hits]);
+
+        lnght += pictures.hits.length;
+        console.log(pictures);
+        console.log(lnght);
+        if (lnght >= pictures.totalHits && pictures.hits.length !== 0) {
+          Notiflix.Notify.warning(
+            'Were sorry, but youve reached the end of search results.'
+          );
+        } else if (pictures.hits.length === 0) {
           Notiflix.Notify.warning('No picture are found');
-          setButton(false);
         } else setButton(true);
-      } catch (error) {
-        setButton(false);
-        Notiflix.Notify.warning(
-          'Were sorry, but youve reached the end of search results.'
-        );
-      } finally {
-        setLoading(false);
-      }
-    }
-    getPictures();
+      })
+      .catch(error => {})
+      .finally(setLoading(false));
+
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
@@ -66,6 +65,8 @@ export default function App() {
   };
 
   const hadleFormsubmit = text => {
+    lnght = 0;
+    setPictures([]);
     setText(text);
     setNumberPaget(1);
   };
